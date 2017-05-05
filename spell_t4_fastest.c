@@ -56,6 +56,8 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 	
+	#pragma omp parallel for schedule(runtime) private(i, hash)
+
 	for (i = 0; i < wl_size; i++) {
 		for (j = 0; j < num_hf; j++) {
 			hash = hf[j] (get_word(wl, i));
@@ -66,6 +68,9 @@ int main(int argc, char *argv[])
 
 	/* do the spell checking */
 	misspelled = 0;
+
+	#pragma omp parallel for schedule(runtime) private(hash)
+
 	for (j = 0; j < num_hf; j++) {
 		hash = hf[j] (word);
 		hash %= bv_size;
